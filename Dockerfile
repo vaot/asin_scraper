@@ -1,4 +1,4 @@
-FROM ruby:2.3.1
+FROM ruby:2.6.3
 MAINTAINER @vaot
 
 RUN apt-get update && apt-get install -qy nginx curl nodejs nano
