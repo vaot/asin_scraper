@@ -3,31 +3,70 @@ class AmazonProduct
     @product_page_doc = product_page_doc
   end
 
+  def image_url
+    base = safe_call do
+      @product_page_doc.css('#landingImage')
+        .first
+        .attributes['src']
+        .value
+    end
+
+    base ||= safe_call do
+      @product_page_doc.css('#main-image-container img')
+        .first
+        .attributes['src']
+        .value
+    end
+
+    base
+  end
+
   def title
-    @product_page_doc.css("#productTitle")
-      .first
-      .content
-      .strip
+    safe_call do
+      @product_page_doc.css("#productTitle")
+        .first
+        .content
+        .strip
+    end
   end
 
   def category
-    @product_page_doc.css('#wayfinding-breadcrumbs_container')
-      .first
-      .content
-      .gsub("\n", "")
-      .split
-      .join(" ")
+    safe_call do
+      @product_page_doc.css('#wayfinding-breadcrumbs_container')
+        .first
+        .content
+        .gsub("\n", "")
+        .split
+        .join(" ")
+    end
   end
 
   def best_seller_rank
-    @product_page_doc.css("#SalesRank")
-      .first
-      .content
-      .gsub("\n", "")
-      .match(/#[0-9]+/)[0]
-      .strip
-      .gsub("#", "")
-      .to_i
+    base = nil
+
+    base = safe_call do
+      @product_page_doc.css("#SalesRank")
+        .first
+        .content
+        .gsub("\n", "")
+        .match(/#[0-9]+/)[0]
+        .strip
+        .gsub("#", "")
+        .to_i
+    end
+
+    base ||= safe_call do
+      @product_page_doc.at("th:contains('Best Sellers Rank')")
+        .parent
+        .content
+        .gsub("\n", "")
+        .match(/#[0-9]+/)[0]
+        .strip
+        .gsub("#", "")
+        .to_i
+    end
+
+    base
   end
 
   def dimensions
@@ -54,8 +93,17 @@ class AmazonProduct
 
   private
 
+  def safe_call(&block)
+    begin
+      block.call
+    rescue => e
+      puts e.inspect
+      nil
+    end
+  end
+
   def get_dimension_elements
-    possible_texts = ['Product Dimensions', 'Package Dimensions', 'Item Dimensions']
+    possible_texts = ['Product Dimensions', 'Package Dimensions', 'Item Dimensions', 'Parcel Dimensions']
     possible_elements = ['li', 'tr']
 
     possible_texts.each do |text|
@@ -65,5 +113,7 @@ class AmazonProduct
         end
       end
     end
+
+    ""
   end
 end

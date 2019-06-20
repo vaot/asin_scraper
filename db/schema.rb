@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_19_025033) do
+ActiveRecord::Schema.define(version: 2019_06_20_042304) do
 
   create_table "products", force: :cascade do |t|
     t.string "status", default: "inactive"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 2019_06_19_025033) do
     t.integer "length_in_hundreds"
     t.integer "width_in_hundreds"
     t.integer "height_in_hundreds"
+    t.string "amazon_image_url"
     t.index ["asin"], name: "index_products_on_asin", unique: true
   end
 

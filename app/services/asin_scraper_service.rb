@@ -1,5 +1,4 @@
 require 'nokogiri'
-require 'open-uri'
 
 class AsinScraperService
 
@@ -15,6 +14,7 @@ class AsinScraperService
       product.title = presenter.title
       product.category = presenter.category
       product.best_seller_rank = presenter.best_seller_rank
+      product.amazon_image_url = presenter.image_url
 
       product.length_in_hundreds = presenter.dimensions[:length] * UNIT_OF_DIMENSIONS
       product.width_in_hundreds = presenter.dimensions[:width] * UNIT_OF_DIMENSIONS
@@ -23,6 +23,8 @@ class AsinScraperService
 
       product.save!
     end
+
+    nil
   end
 
   private
@@ -32,7 +34,20 @@ class AsinScraperService
   end
 
   def html_doc
-    @html_doc ||= Nokogiri::HTML(open(to_url).read)
+    @html_doc ||= Nokogiri::HTML(get_html)
+  end
+
+  def get_html
+    script = Rails.root.join("lib", "phantomjs_page_download.js")
+
+    %x(phantomjs #{script} #{to_url} > "/tmp/page_test_#{@asin_number}.html")
+    cmd_status = $?
+
+    if cmd_status.exitstatus != 0
+      ""
+    else
+      File.read("/tmp/page_test_#{@asin_number}.html")
+    end
   end
 
   def to_url
