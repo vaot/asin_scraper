@@ -6,15 +6,6 @@ class AmazonProduct
     @html_doc = html_doc
   end
 
-  def method_missing(m, *args, &block)
-    if AVAILABLE_ATTRS.include?(m)
-      args = args.push(m.to_s)
-      send(:perform, *args, &block)
-    else
-      super(m, *args, &block)
-    end
-  end
-
   def perform(attribute)
     ScraperExpression.where(key: attribute).find_each do |record|
       base = safe_call do
@@ -58,6 +49,15 @@ class AmazonProduct
     rescue => e
       puts e
       nil
+    end
+  end
+
+  def method_missing(m, *args, &block)
+    if AVAILABLE_ATTRS.include?(m)
+      args = args.push(m.to_s)
+      send(:perform, *args, &block)
+    else
+      super(m, *args, &block)
     end
   end
 end

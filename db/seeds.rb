@@ -26,14 +26,14 @@ RANK_EXPS = [
 ]
 
 DIMENSIONS_EXPS = [
-  "at('li:contains('Product Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('tr:contains('Product Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('li:contains('Package Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('tr:contains('Package Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('li:contains('Item Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('tr:contains('Item Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('li:contains('Parcel Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
-  "at('tr:contains('Parcel Dimensions')').content.strip.gsub('\n', ').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)"
+  "at('li:contains('Product Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('tr:contains('Product Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('li:contains('Package Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('tr:contains('Package Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('li:contains('Item Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('tr:contains('Item Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('li:contains('Parcel Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)",
+  "at('tr:contains('Parcel Dimensions')').content.strip.gsub('\n', '').split.select { |s| s.match(/[0-9]+/) }.map(&:to_f)"
 ]
 
 TITLES_EXPS.each do |ex|
