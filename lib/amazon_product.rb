@@ -73,7 +73,7 @@ class AmazonProduct
     base = get_dimension_elements
 
     unless base.present?
-      return {}
+      return Hash.new(0)
     end
 
     base = base.content
