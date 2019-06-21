@@ -97,7 +97,7 @@ class AmazonProduct
     begin
       block.call
     rescue => e
-      puts e.inspect
+      puts e
       nil
     end
   end
