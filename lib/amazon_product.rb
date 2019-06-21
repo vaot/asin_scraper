@@ -1,95 +1,46 @@
 class AmazonProduct
+
+  AVAILABLE_ATTRS = %i(title image_url category best_seller_rank dimensions)
+
   def initialize(html_doc)
     @html_doc = html_doc
   end
 
-  def image_url
-    base = safe_call do
-      @html_doc.css("#landingImage")
-        .first.attributes["data-old-hires"]
-        .value
-        .presence
-    end
-
-    base ||= safe_call do
-      @html_doc.css('#landingImage')
-        .first
-        .attributes['src']
-        .value
-        .presence
-    end
-
-    base ||= safe_call do
-      @html_doc.css('#main-image-container img')
-        .first
-        .attributes['src']
-        .value
-    end
-
-    base
-  end
-
-  def title
-    safe_call do
-      @html_doc.css("#productTitle")
-        .first
-        .content
-        .strip
+  def method_missing(m, *args, &block)
+    if AVAILABLE_ATTRS.include?(m)
+      args = args.push(m.to_s)
+      send(:perform, *args, &block)
+    else
+      super(m, *args, &block)
     end
   end
 
-  def category
-    safe_call do
-      @html_doc.css('#wayfinding-breadcrumbs_container')
-        .first
-        .content
-        .gsub("\n", "")
-        .split
-        .join(" ")
-    end
-  end
+  def perform(attribute)
+    ScraperExpression.where(key: attribute).find_each do |record|
+      base = safe_call do
+        @html_doc.instance_eval(record.expression)
+      end
 
-  def best_seller_rank
-    base = nil
-
-    base = safe_call do
-      @html_doc.css("#SalesRank")
-        .first
-        .content
-        .gsub("\n", "")
-        .match(/#[0-9]+/)[0]
-        .strip
-        .gsub("#", "")
-        .to_i
+      return base if base.present?
     end
 
-    base ||= safe_call do
-      @html_doc.at("th:contains('Best Sellers Rank')")
-        .parent
-        .content
-        .gsub("\n", "")
-        .match(/#[0-9]+/)[0]
-        .strip
-        .gsub("#", "")
-        .to_i
-    end
-
-    base
+    nil
   end
 
   def dimensions
-    base = get_dimension_elements
+    base = nil
+
+    ScraperExpression.where(key: "dimensions").find_each do |record|
+      base = safe_call do
+        @html_doc.instance_eval(record.expression)
+      end
+
+      break if base.present?
+    end
 
     unless base.present?
       return Hash.new(0)
     end
-
-    base = base.content
-      .strip
-      .gsub("\n", "")
-      .split
-      .select { |s| s.match(/[0-9]+/) }
-      .map(&:to_f)
 
     {
       length: base[0],
@@ -108,20 +59,5 @@ class AmazonProduct
       puts e
       nil
     end
-  end
-
-  def get_dimension_elements
-    possible_texts = ['Product Dimensions', 'Package Dimensions', 'Item Dimensions', 'Parcel Dimensions']
-    possible_elements = ['li', 'tr']
-
-    possible_texts.each do |text|
-      possible_elements.each do |element|
-        if dimension = @html_doc.at("#{element}:contains('#{text}')")
-          return dimension
-        end
-      end
-    end
-
-    ""
   end
 end

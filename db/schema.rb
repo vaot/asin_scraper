@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_20_042304) do
+ActiveRecord::Schema.define(version: 2019_06_21_172833) do
 
   create_table "products", force: :cascade do |t|
     t.string "status", default: "inactive"
@@ -23,6 +23,12 @@ ActiveRecord::Schema.define(version: 2019_06_20_042304) do
     t.integer "height_in_hundreds"
     t.string "amazon_image_url"
     t.index ["asin"], name: "index_products_on_asin", unique: true
+  end
+
+  create_table "scraper_expressions", force: :cascade do |t|
+    t.string "key", limit: 40
+    t.string "expression"
+    t.index ["key"], name: "index_scraper_expressions_on_key"
   end
 
 end

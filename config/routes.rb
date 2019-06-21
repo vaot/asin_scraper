@@ -4,6 +4,8 @@ Rails.application.routes.draw do
 
   mount Sidekiq::Web => '/sidekiq'
 
+  resources :scraper_expressions, only: [:index, :new, :destroy, :create]
+
   namespace :api do
     namespace :v1 do
       resources :products, except: [:edit, :update] do
