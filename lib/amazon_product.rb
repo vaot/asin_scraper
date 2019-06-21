@@ -1,18 +1,26 @@
 class AmazonProduct
-  def initialize(product_page_doc)
-    @product_page_doc = product_page_doc
+  def initialize(html_doc)
+    @html_doc = html_doc
   end
 
   def image_url
     base = safe_call do
-      @product_page_doc.css('#landingImage')
-        .first
-        .attributes['src']
+      @html_doc.css("#landingImage")
+        .first.attributes["data-old-hires"]
         .value
+        .presence
     end
 
     base ||= safe_call do
-      @product_page_doc.css('#main-image-container img')
+      @html_doc.css('#landingImage')
+        .first
+        .attributes['src']
+        .value
+        .presence
+    end
+
+    base ||= safe_call do
+      @html_doc.css('#main-image-container img')
         .first
         .attributes['src']
         .value
@@ -23,7 +31,7 @@ class AmazonProduct
 
   def title
     safe_call do
-      @product_page_doc.css("#productTitle")
+      @html_doc.css("#productTitle")
         .first
         .content
         .strip
@@ -32,7 +40,7 @@ class AmazonProduct
 
   def category
     safe_call do
-      @product_page_doc.css('#wayfinding-breadcrumbs_container')
+      @html_doc.css('#wayfinding-breadcrumbs_container')
         .first
         .content
         .gsub("\n", "")
@@ -45,7 +53,7 @@ class AmazonProduct
     base = nil
 
     base = safe_call do
-      @product_page_doc.css("#SalesRank")
+      @html_doc.css("#SalesRank")
         .first
         .content
         .gsub("\n", "")
@@ -56,7 +64,7 @@ class AmazonProduct
     end
 
     base ||= safe_call do
-      @product_page_doc.at("th:contains('Best Sellers Rank')")
+      @html_doc.at("th:contains('Best Sellers Rank')")
         .parent
         .content
         .gsub("\n", "")
@@ -108,7 +116,7 @@ class AmazonProduct
 
     possible_texts.each do |text|
       possible_elements.each do |element|
-        if dimension = @product_page_doc.at("#{element}:contains('#{text}')")
+        if dimension = @html_doc.at("#{element}:contains('#{text}')")
           return dimension
         end
       end
