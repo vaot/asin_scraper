@@ -10,7 +10,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
   if Rails.env.production?
     allow do
-      origins 'victorvaot.com', 'www.victorvaot.com'
+      origins 'victorvaot.com', 'www.victorvaot.com', 'react.victorvaot.com'
       resource '*',
         headers: :any,
         methods: %i(get post put patch delete options head)
