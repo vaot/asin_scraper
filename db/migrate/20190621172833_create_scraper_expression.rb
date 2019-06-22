@@ -3,6 +3,8 @@ class CreateScraperExpression < ActiveRecord::Migration[5.2]
     create_table :scraper_expressions do |t|
       t.string :key, limit: 40
       t.string :expression
+
+      t.timestamps
     end
 
     add_index :scraper_expressions, :key

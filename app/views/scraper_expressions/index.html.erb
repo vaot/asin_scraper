@@ -1,9 +1,15 @@
-<table>
-  <% @scraper_expressions.each do |scraper_expression| %>
-    <tr>
-      <td><%= link_to scraper_expression.key, scraper_expression_path(scraper_expression) %></td>
-      <td><%=  scraper_expression.expression %></td>
-      <td><%= button_to 'Remove', scraper_expression_path(scraper_expression), method: 'delete', data: { confirm: 'Are you sure?' } %></td>
-  <% end %>
-</table>
-<%= link_to "Add a New scraper_expression", new_scraper_expression_path %>
+<div class='card shadow'>
+  <%= link_to "Add a New scraper_expression", new_scraper_expression_path, class: 'btn btn-primary' %>
+  <hr>
+  <table class='table'>
+    <% @scraper_expressions.each do |scraper_expression| %>
+      <tr>
+        <td><%= link_to scraper_expression.key, scraper_expression_path(scraper_expression) %></td>
+        <td><%=  scraper_expression.expression %></td>
+        <td><%= button_to 'Remove', scraper_expression_path(scraper_expression),
+                method: 'delete',
+                class: 'btn btn-warning',
+                data: { confirm: 'Are you sure?' } %></td>
+    <% end %>
+  </table>
+</div>

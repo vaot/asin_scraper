@@ -1,32 +1,42 @@
-<h3>Create a Scraper Expression</h3>
-<%= form_with model: @scraper_expression do |form| %>
+<div>
+  <div class='row'>
+    <div class='col-md-4 shadow'>
+      <h3>Create a Scraper Expression</h3>
+      <%= form_with model: @scraper_expression do |form| %>
 
-  <label>Choose what the expression is for:</label>
-  <br>
-  <div>
-    <%= form.label :key, 'image_url', :value => 'image_url' %>
-    <%= form.radio_button :key, "image_url" %>
+        <label>Choose what the expression is for:</label>
+        <br>
+        <div class='form-group'>
+          <%= form.label :key, 'image_url', :value => 'image_url' %>
+          <%= form.radio_button :key, "image_url" %>
+        </div>
+
+        <div class='form-group'>
+          <%= form.label :key, 'dimensions', :value => 'dimensions' %>
+          <%= form.radio_button :key, "dimensions" %>
+        </div>
+
+        <div class='form-group'>
+          <%= form.label :key, 'best_seller_rank', :value => 'best_seller_rank' %>
+          <%= form.radio_button :key, "best_seller_rank" %>
+        </div>
+
+        <div class='form-group'>
+          <%= form.label :key, 'category', :value => 'category' %>
+          <%= form.radio_button :key, "category" %>
+        </div>
+
+
+        <%= form.text_field :expression,
+            placeholder: "Expression to be evaluated within the dom",
+            class: 'form-control' %>
+
+        <hr>
+        <div>
+          <%= form.submit "Create", class: 'btn btn-danger' %>
+        </div>
+        <hr>
+      <% end %>
+    </div>
   </div>
-
-  <div>
-    <%= form.label :key, 'dimensions', :value => 'dimensions' %>
-    <%= form.radio_button :key, "dimensions" %>
-  </div>
-
-  <div>
-    <%= form.label :key, 'best_seller_rank', :value => 'best_seller_rank' %>
-    <%= form.radio_button :key, "best_seller_rank" %>
-  </div>
-
-  <div>
-    <%= form.label :key, 'category', :value => 'category' %>
-    <%= form.radio_button :key, "category" %>
-  </div>
-
-  <%= form.text_field :expression, placeholder: "Expression to be evaluated within the dom" %>
-
-  <div>
-    <%= form.submit %>
-  </div>
-
-<% end %>
+</div>

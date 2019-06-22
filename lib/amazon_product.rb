@@ -1,3 +1,9 @@
+#
+# Prensenter class that takes an Nokokiri document of the amazon page
+# and extracts given properties defined at AVAILABLE_ATTRS.
+# The expressions used to extract these properties should be defined as ScraperExpression
+# with its key having the same name of the property being extracted.
+#
 class AmazonProduct
 
   AVAILABLE_ATTRS = %i(title image_url category best_seller_rank dimensions)
@@ -6,6 +12,7 @@ class AmazonProduct
     @html_doc = html_doc
   end
 
+  # Method missing will fallback to this perform with the attribute name.
   def perform(attribute)
     ScraperExpression.where(key: attribute).find_each do |record|
       base = safe_call do
@@ -52,12 +59,12 @@ class AmazonProduct
     end
   end
 
-  def method_missing(m, *args, &block)
-    if AVAILABLE_ATTRS.include?(m)
-      args = args.push(m.to_s)
+  def method_missing(property_name, *args, &block)
+    if AVAILABLE_ATTRS.include?(property_name)
+      args = args.push(property_name.to_s)
       send(:perform, *args, &block)
     else
-      super(m, *args, &block)
+      super(property_name, *args, &block)
     end
   end
 end

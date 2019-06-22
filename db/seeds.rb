@@ -14,8 +14,8 @@ IMAGE_EXPS = [
 ]
 
 RANK_EXPS = [
-  "css('#SalesRank').first.content.gsub('\n', '').match(/#[0-9]+/)[0].strip.gsub('#', '').to_i",
-  "at('th:contains(\"Best Sellers Rank\")').parent.content.gsub('\n', '').match(/#[0-9]+/)[0].strip.gsub('#', '').to_i"
+  "css('#SalesRank').first.content.gsub(' ', '').match(/#[0-9,\s]+/)[0].gsub(/[\s,]/, '').strip.gsub('#', '').to_i",
+  "at('th:contains(\"Best Sellers Rank\")').parent.content.gsub(' ', '').match(/#[0-9,\s]+/)[0].gsub(/[\s,]/, '').strip.gsub('#', '').to_i"
 ]
 
 DIMENSIONS_EXPS = [

@@ -14,6 +14,8 @@ class CreateProducts < ActiveRecord::Migration[5.2]
       t.integer :length_in_hundreds
       t.integer :width_in_hundreds
       t.integer :height_in_hundreds
+
+      t.timestamps
     end
 
     add_index :products, :asin, unique: true

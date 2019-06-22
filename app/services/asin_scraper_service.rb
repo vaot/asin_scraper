@@ -2,8 +2,13 @@ require 'nokogiri'
 
 class AsinScraperService
 
+  REQUIRED_ATTRS = %i(title amazon_image_url category best_seller_rank)
   AMAZON_BASE_URL = "https://www.amazon.com/dp"
   UNIT_OF_DIMENSIONS = 100
+
+  def self.valid?(product)
+    REQUIRED_ATTRS.map { |prop| product.send(prop).present? }.any?
+  end
 
   def initialize(asin_number)
     @asin_number = asin_number
@@ -19,7 +24,10 @@ class AsinScraperService
       product.length_in_hundreds = presenter.dimensions[:length] * UNIT_OF_DIMENSIONS
       product.width_in_hundreds = presenter.dimensions[:width] * UNIT_OF_DIMENSIONS
       product.height_in_hundreds = presenter.dimensions[:height] * UNIT_OF_DIMENSIONS
-      product.status = Product::STATUSES[:active]
+
+      if self.class.valid?(product)
+        product.status = Product::STATUSES[:active]
+      end
 
       product.save!
     end
