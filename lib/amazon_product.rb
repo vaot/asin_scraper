@@ -50,11 +50,13 @@ class AmazonProduct
 
   private
 
+  # We need to be cautious with swallowing exceptions like this,
+  # but since these expressions are added via admin, we dont
+  # want to take the app down for these.
   def safe_call(&block)
     begin
       block.call
-    rescue => e
-      puts e
+    rescue NoMethodError => e
       nil
     end
   end

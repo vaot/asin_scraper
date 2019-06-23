@@ -1,4 +1,4 @@
-class Api::V1::ProductsController < ApplicationController
+class Api::V1::ProductsController < ApiController
   before_action :validate_asin, only: [:fetch]
   before_action :require_resource, only: [:destroy, :show]
 

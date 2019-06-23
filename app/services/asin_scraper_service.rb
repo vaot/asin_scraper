@@ -32,7 +32,7 @@ class AsinScraperService
       product.save!
     end
 
-    nil
+    product
   end
 
   private
