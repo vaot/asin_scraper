@@ -1,5 +1,5 @@
 class Api::V1::ProductsController < ApiController
-  before_action :validate_asin, only: [:fetch]
+  before_action :validate_asin_query, only: [:fetch]
   before_action :require_resource, only: [:destroy, :show]
 
   def index
@@ -33,8 +33,8 @@ class Api::V1::ProductsController < ApiController
     end
   end
 
-  def validate_asin
-    unless params[:id].match(/[0-9a-zA-Z]{10}/)
+  def validate_asin_query
+    unless params[:id].match(AmazonProduct::ASIN_VALID_QUERY_REGEX)
       render json: { error: "Invalid ASIN number" }, status: :bad_request
       return
     end

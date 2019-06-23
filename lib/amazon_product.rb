@@ -6,12 +6,18 @@
 #
 class AmazonProduct
 
+  ASIN_VALID_QUERY_REGEX = /[0-9a-zA-Z]{10}/
   AVAILABLE_ATTRS = %i(title image_url category best_seller_rank dimensions)
 
   def initialize(html_doc)
     @html_doc = html_doc
   end
 
+  # WARNING:
+  # Even though ScraperExpression is not input that would come from the user
+  # this method calls #instance_eval and should be RECONSIDERED for a production
+  # grade application, since it IMPOSES security risks.
+  #
   # Method missing will fallback to this perform with the attribute name.
   def perform(attribute)
     ScraperExpression.where(key: attribute).find_each do |record|
