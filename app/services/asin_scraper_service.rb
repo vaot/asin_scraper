@@ -46,15 +46,17 @@ class AsinScraperService
   end
 
   def get_html
-    script = Rails.root.join("lib", "phantomjs_page_download.js")
+    PageCacheService.new(@asin_number).fetch do
+      script = Rails.root.join("lib", "phantomjs_page_download.js")
 
-    %x(phantomjs #{script} #{to_url} > "/tmp/page_test_#{@asin_number}.html")
-    cmd_status = $?
+      %x(phantomjs #{script} #{to_url} > "/tmp/page_test_#{@asin_number}.html")
+      cmd_status = $?
 
-    if cmd_status.exitstatus != 0
-      ""
-    else
-      File.read("/tmp/page_test_#{@asin_number}.html")
+      if cmd_status.exitstatus != 0
+        ""
+      else
+        File.read("/tmp/page_test_#{@asin_number}.html")
+      end
     end
   end
 
