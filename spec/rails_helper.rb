@@ -35,12 +35,6 @@ end
 
 Rails.application.load_seed
 
-AsinScraper.class_eval do
-  def redis
-    @redis ||= MockRedis.new
-  end
-end
-
 RSpec.configure do |config|
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -72,6 +66,10 @@ RSpec.configure do |config|
 
   config.include(Shoulda::Matchers::ActiveModel, type: :model)
   config.include(Shoulda::Matchers::ActiveRecord, type: :model)
+
+  config.before(:each) do
+    allow(Redis).to receive(:new).and_return(MockRedis.new)
+  end
 
   config.after(:suite) do
     DatabaseCleaner.strategy = :transaction
